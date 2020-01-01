@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace A6k.Messaging
 {
@@ -20,7 +21,10 @@ namespace A6k.Messaging
         int Partition { get; }
         long Offset { get; }
 
-        IMessageHeaders Headers { get; }
+        IEnumerable<KeyValuePair<string, object>> Headers { get; }
+        object GetHeader(string key);
+        IMessage AddHeader(string key, object value);
+        void ForEachHeader(Action<KeyValuePair<string, object>> action);
     }
 
     /// <summary>

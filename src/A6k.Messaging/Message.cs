@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace A6k.Messaging
@@ -11,6 +13,8 @@ namespace A6k.Messaging
     public class Message<TKey, TValue> : IMessage<TKey, TValue>
     {
         public static readonly Task<IMessage<TKey, TValue>> Null = Task.FromResult<IMessage<TKey, TValue>>(null);
+        
+        private KeyValueListNode headers;
 
         /// <inheritdoc/>
         public string ActivityId { get; set; }
@@ -28,21 +32,58 @@ namespace A6k.Messaging
         public long Offset { get; set; }
 
         /// <inheritdoc/>
-        /// <inheritdoc/>
-        IMessageHeaders IMessage.Headers => Headers;
-        public MessageHeaders Headers { get; private set; }
-
-        public Message<TKey, TValue> AddHeader(string key, object value) {
-            if (Headers == null)
-                Headers = new MessageHeaders();
-            Headers.AddHeader(key, value);
-            return this;
-        }
-
-        /// <inheritdoc/>
         public TKey Key { get; set; }
 
         /// <inheritdoc/>
         public TValue Value { get; set; }
+
+        public IEnumerable<KeyValuePair<string, object>> Headers
+        {
+            get
+            {
+                if (headers == null)
+                    yield break;
+
+                for (var h = headers; h != null; h = h.Next)
+                    yield return h.KeyValue;
+            }
+        }
+
+        public object GetHeader(string key)
+        {
+            foreach (var keyValue in Headers)
+                if (key == keyValue.Key)
+                    return keyValue.Value;
+
+            return null;
+        }
+
+        public IMessage AddHeader(string key, object value)
+        {
+            var currentHeader = headers;
+            var newHeaders = new KeyValueListNode { KeyValue = new KeyValuePair<string, object>(key, value) };
+
+            do
+            {
+                newHeaders.Next = currentHeader;
+                currentHeader = Interlocked.CompareExchange(ref headers, newHeaders, currentHeader);
+            } while (!ReferenceEquals(newHeaders.Next, currentHeader));
+
+            return this;
+        }
+
+        public void ForEachHeader(Action<KeyValuePair<string, object>> action)
+        {
+            if (headers == null)
+                return;
+            foreach (var h in Headers)
+                action(h);
+        }
+
+        private partial class KeyValueListNode
+        {
+            public KeyValuePair<string, object> KeyValue;
+            public KeyValueListNode Next;
+        }
     }
 }

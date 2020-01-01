@@ -40,7 +40,8 @@ namespace A6k.Messaging.Tests
                 ActivityId = "activity",
                 Key = "123",
                 Value = "fred"
-            }.AddHeader("h1", "v1");
+            };
+            message.AddHeader("h1", "v1");
 
             await producer.ProduceAsync(message);
 

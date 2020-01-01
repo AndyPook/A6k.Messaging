@@ -84,7 +84,7 @@ namespace A6k.Messaging.Kafka
             };
 
             kafkaMessage.Headers.Add(MessageHeaders.ActivityId, Encoding.UTF8.GetBytes(message.ActivityId ?? Activity.Current?.Id ?? Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture)));
-            message.Headers?.ForEach(header => kafkaMessage.Headers.Add(header.Key, GetHeaderBytes(header.Value)));
+            message.ForEachHeader(header => kafkaMessage.Headers.Add(header.Key, GetHeaderBytes(header.Value)));
 
             await producer.ProduceAsync(options.Topic, kafkaMessage);
         }
