@@ -1,4 +1,6 @@
-﻿namespace A6k.Messaging.Features
+﻿using A6k.Messaging.Features;
+
+namespace A6k.Messaging.Kafka.Features
 {
     /// <summary>
     /// This feature is used when a new consumer group partition assignment has been received by this consumer.

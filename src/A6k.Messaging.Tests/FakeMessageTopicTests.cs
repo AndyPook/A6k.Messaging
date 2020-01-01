@@ -10,7 +10,7 @@ namespace A6k.Messaging.Tests
         public async Task EnsureMessageAvailable()
         {
             // Arrange
-            var topic = new FakeMessageTopic<string, string>();
+            var topic = new FakeMessageBus<string, string>();
 
             // Act
             await topic.ProduceAsync("123", "BLAH");
@@ -32,8 +32,8 @@ namespace A6k.Messaging.Tests
             var producer = sp.GetMessageProducer<string, string>(nameof(RegisterProvider));
 
             Assert.NotNull(producer);
-            Assert.IsType<FakeMessageTopic<string, string>>(producer);
-            Assert.Equal(nameof(RegisterProvider), ((FakeMessageTopic<string, string>)producer).TopicName);
+            Assert.IsType<FakeMessageBus<string, string>>(producer);
+            Assert.Equal(nameof(RegisterProvider), ((FakeMessageBus<string, string>)producer).TopicName);
         }
     }
 }

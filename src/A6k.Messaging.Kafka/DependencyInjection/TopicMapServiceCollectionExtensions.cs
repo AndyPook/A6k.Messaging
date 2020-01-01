@@ -1,6 +1,6 @@
 ﻿using System;
 using A6k.Messaging;
-using A6k.Messaging.Features;
+using A6k.Messaging.Kafka.Features;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

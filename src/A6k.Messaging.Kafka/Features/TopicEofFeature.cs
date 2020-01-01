@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace A6k.Messaging.Features
+namespace A6k.Messaging.Kafka.Features
 {
     /// <summary>
     /// Captures the moment when a consumer reaches the "end" of a topic/queue.

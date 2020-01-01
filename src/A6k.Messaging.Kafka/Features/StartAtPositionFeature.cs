@@ -1,4 +1,6 @@
-﻿namespace A6k.Messaging.Features
+﻿using A6k.Messaging.Features;
+
+namespace A6k.Messaging.Kafka.Features
 {
     /// <summary>
     /// A kafka concept of where in the queue to start

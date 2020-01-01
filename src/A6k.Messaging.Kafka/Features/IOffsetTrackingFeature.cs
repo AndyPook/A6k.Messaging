@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace A6k.Messaging.Features
+using A6k.Messaging.Features;
+
+namespace A6k.Messaging.Kafka.Features
 {
     public interface IOffsetTrackingFeature<TKey, TValue> : IFeature
     {

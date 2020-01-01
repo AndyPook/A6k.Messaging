@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace A6k.Messaging
+namespace A6k.Messaging.Kafka
 {
     public static class FakeMessageTopicProvider
     {
-        public const string ProviderName = "fake";
+        public const string ProviderName = "fakeTopic";
 
         private static readonly ConcurrentDictionary<string, Lazy<object>> topics = new ConcurrentDictionary<string, Lazy<object>>();
 

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace A6k.Messaging.Features
+namespace A6k.Messaging.Kafka.Features
 {
     public class PartitionTrackingFeature : IPartitionTrackingFeature, IEnumerable<KeyValuePair<string, IEnumerable<int>>>
     {

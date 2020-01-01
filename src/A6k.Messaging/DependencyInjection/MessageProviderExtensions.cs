@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddFakeMessageProviders(this IServiceCollection services)
-            => services.AddMessageProviders(FakeMessageTopicProvider.ProviderName, typeof(FakeMessageTopic<,>), typeof(FakeMessageTopic<,>));
+            => services.AddMessageProviders(FakeMessageBusProvider.ProviderName, typeof(FakeMessageBus<,>), typeof(FakeMessageBus<,>));
 
         /// <summary>
         /// Adds providers required for each messaging type (kafka, fake, mq ...)

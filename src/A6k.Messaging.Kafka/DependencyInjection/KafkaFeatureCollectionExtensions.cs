@@ -43,5 +43,41 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return f;
         }
+
+        /// <summary>
+        /// Start at the beginning of the Topic
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
+        public static IFeatureCollection StartAtBeginning(this IFeatureCollection f)
+        {
+            f.Set(StartAtPositionFeature.Beginning);
+
+            return f;
+        }
+
+        /// <summary>
+        /// Start at the end of the Topic
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
+        public static IFeatureCollection StartAtEnd(this IFeatureCollection f)
+        {
+            f.Set(StartAtPositionFeature.End);
+
+            return f;
+        }
+
+        /// <summary>
+        /// Set the GroupId to something unique
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
+        public static IFeatureCollection UniqueGroupId(this IFeatureCollection f)
+        {
+            f.Set(new UniqueGroupIdFeature());
+
+            return f;
+        }
     }
 }

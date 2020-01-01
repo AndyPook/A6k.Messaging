@@ -1,9 +1,8 @@
-﻿using A6k.Messaging.Features;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using A6k.Messaging.Features;
 
 namespace A6k.Messaging
 {
@@ -13,17 +12,16 @@ namespace A6k.Messaging
     /// </summary>
     /// <typeparam name="TKey">Key type</typeparam>
     /// <typeparam name="TValue">Value type</typeparam>
-    public sealed class FakeMessageTopic<TKey, TValue> : IMessageProducer<TKey, TValue>, IMessageConsumer<TKey, TValue>
+    public sealed class FakeMessageBus<TKey, TValue> : IMessageProducer<TKey, TValue>, IMessageConsumer<TKey, TValue>
     {
         private readonly BlockingCollection<IMessage<TKey, TValue>> topic;
-        private readonly ConcurrentDictionary<int, byte> assignedPartitions = new ConcurrentDictionary<int, byte>();
 
         private Task completion;
 
-        public FakeMessageTopic(string topicName = null)
+        public FakeMessageBus(string topicName = null)
         {
             TopicName = topicName ?? Guid.NewGuid().ToString();
-            topic = FakeMessageTopicProvider.GetTopic<TKey, TValue>(TopicName);
+            topic = FakeMessageBusProvider.GetTopic<TKey, TValue>(TopicName);
         }
 
         public string TopicName { get; }
@@ -65,37 +63,17 @@ namespace A6k.Messaging
         }
 
         /// <inheritdoc/>
-        public async Task AcceptAsync(IMessage message)
-        {
-            if (features.OffsetTracking != null)
-                await features.OffsetTracking.AcceptAsync(message);
-        }
+        public Task AcceptAsync(IMessage message) => Task.CompletedTask;
 
         /// <inheritdoc/>
-        public async Task RejectAsync(IMessage<TKey, TValue> message)
-        {
-            if (features.OffsetTracking == null)
-                await AcceptAsync(message);
-            else
-                await features.OffsetTracking.RejectAsync(message);
-        }
+        public Task RejectAsync(IMessage<TKey, TValue> message) => AcceptAsync(message);
 
 
         /// <inheritdoc/>
         public Task<IMessage<TKey, TValue>> ConsumeAsync()
         {
             if (topic.TryTake(out var message, 100))
-            {
-                if (assignedPartitions.TryAdd(message.Partition, 0))
-                {
-                    features.PartitionTracking?.PartitionAssigned(TopicName, message.Partition);
-                    features.PartitionAssignment?.PartitionAssigned(TopicName, message.Partition);
-                }
-
                 return Task.FromResult(message);
-            }
-
-            features.PartitionEof?.PartitionIsEof(TopicName, 0);
 
             return Message<TKey, TValue>.Null;
         }
@@ -117,28 +95,12 @@ namespace A6k.Messaging
         /// </summary>
         private class FeaturesCollection : FeatureCollectionBase
         {
-            private IOffsetTrackingFeature<TKey, TValue> offsetTracking;
-            public IOffsetTrackingFeature<TKey, TValue> OffsetTracking => offsetTracking;
-
-            private IPartitionTrackingFeature partitionTracking;
-            public IPartitionTrackingFeature PartitionTracking => partitionTracking;
-
-            private IPartitionAssignmentFeature partitionAssignment;
-            public IPartitionAssignmentFeature PartitionAssignment => partitionAssignment;
-
-            private IPartitionEofFeature partitionEof;
-            public IPartitionEofFeature PartitionEof => partitionEof;
-
             private IMessagePumpWaitFeature messagePumpWaitFeature;
             public IMessagePumpWaitFeature MessagePumpWaitFeature => messagePumpWaitFeature;
 
             public override TFeature Get<TFeature>()
             {
                 return TryGet<TFeature>(
-                    offsetTracking,
-                    partitionTracking,
-                    partitionAssignment,
-                    partitionEof,
                     messagePumpWaitFeature
                 );
             }
@@ -147,10 +109,6 @@ namespace A6k.Messaging
             {
                 base.Set(feature);
 
-                TrySet(feature, ref offsetTracking);
-                TrySet(feature, ref partitionTracking);
-                TrySet(feature, ref partitionAssignment);
-                TrySet(feature, ref partitionEof);
                 TrySet(feature, ref messagePumpWaitFeature);
             }
         }
