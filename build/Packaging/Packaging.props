@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Game</Authors>
+    <Company>Game</Company>
+    <Copyright>© $(Company). All rights reserved.</Copyright>
+    <PackageTags>$(PackageTags)</PackageTags>
+    <PackageIconUrl>https://jira.game.co.uk/secure/projectavatar?pid=10800&amp;avatarId=10333</PackageIconUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <DisablePackageValidation Condition="$(DisablePackageValidation) == ''">false</DisablePackageValidation>
+    <!-- Add the line below to projects or Local.Directory.props to generate nuget packages -->
+    <!-- <GeneratePackageOnBuild>true</GeneratePackageOnBuild> -->
+  </PropertyGroup>
+
+  <!-- embed source -->
+  <PropertyGroup>
+    <EmbedAllSources>true</EmbedAllSources> 
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+</Project>

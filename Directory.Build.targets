@@ -1,0 +1,4 @@
+<Project>
+  <Import Project="build/Build.targets" Condition="Exists('build/Build.targets')" />
+  <Import Project="Local.Build.targets" Condition="Exists('Local.Build.targets')" />
+</Project>

@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <PackageTags>$(PackageTags) Framework Eventing</PackageTags>
+    <PackageProjectUrl>https://bitbucket.game.co.uk/scm/prod/game.eventing.git</PackageProjectUrl>
+  </PropertyGroup>
+</Project>

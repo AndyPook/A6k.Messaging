@@ -1,0 +1,7 @@
+<Project>
+  <Target Name="BuildFeatureImportVersioning" BeforeTargets="AddNugetPackages" Condition="$(TargetFramework) != '' AND !$(IsTestAssembly) AND !$(IsBenchmarkAssembly) AND $(DisableVersioning) != 'true'">
+    <ItemGroup>
+      <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.28" PrivateAssets="all" />
+    </ItemGroup>
+  </Target>
+</Project>

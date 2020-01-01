@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts/nupkgs</PackageOutputPath>
+    <PublishDir>$(MSBuildThisFileDirectory)artifacts/app</PublishDir>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+    <RepositoryType>git</RepositoryType>
+    <!-- <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)a6k.ruleset</CodeAnalysisRuleSet> -->
+  </PropertyGroup>
+
+  <Import Project="build/Build.props" Condition="Exists('build/Build.props')" />
+  <Import Project="Local.Build.props" Condition="Exists('Local.Build.props')" />
+</Project>
