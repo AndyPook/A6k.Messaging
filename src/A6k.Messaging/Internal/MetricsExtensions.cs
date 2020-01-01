@@ -1,7 +1,7 @@
 ﻿using App.Metrics;
 using App.Metrics.Timer;
 
-namespace A6k.Messaging
+namespace A6k.Messaging.Internal
 {
     public static class MetricsExtensions
     {

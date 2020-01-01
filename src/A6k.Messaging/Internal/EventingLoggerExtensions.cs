@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 
-namespace A6k.Messaging
+namespace A6k.Messaging.Internal
 {
     /// <summary>
     /// Extension for "high performance logging"

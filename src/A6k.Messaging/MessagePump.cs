@@ -9,11 +9,13 @@ using App.Metrics.Infrastructure;
 using App.Metrics.Internal.NoOp;
 using App.Metrics.Timer;
 
-using A6k.Messaging.Features;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+
+using A6k.Messaging.Features;
+using A6k.Messaging.Internal;
 
 namespace A6k.Messaging
 {
@@ -29,7 +31,7 @@ namespace A6k.Messaging
         private readonly Func<IMessageConsumer<TKey, TValue>> consumerFactory;
         private readonly IMessageHandler<TKey, TValue> handler;
         //TODO: private readonly ServicePauseUtil pauseUtil;
-        //TODO: private readonly IEnumerable<WaitToken> waitTokens;
+        private readonly IEnumerable<WaitToken> waitTokens;
         private readonly string handlerName;
         private readonly ILogger<MessagePump<TKey, TValue>> logger;
 
@@ -41,14 +43,14 @@ namespace A6k.Messaging
             Func<IMessageConsumer<TKey, TValue>> consumerFactory,
             IMessageHandler<TKey, TValue> handler,
             //ServicePauseUtil pauseUtil = null,
-            //IEnumerable<WaitToken> waitTokens = null,
+            IEnumerable<WaitToken> waitTokens = null,
             ILogger<MessagePump<TKey, TValue>> logger = null,
             IMetrics metrics = null)
         {
             this.consumerFactory = consumerFactory ?? throw new ArgumentNullException(nameof(consumerFactory));
             this.handler = handler ?? throw new ArgumentNullException(nameof(handler));
             //this.pauseUtil = pauseUtil ?? new ServicePauseUtil();
-            //this.waitTokens = waitTokens;
+            this.waitTokens = waitTokens;
             this.logger = logger ?? NullLogger<MessagePump<TKey, TValue>>.Instance;
 
             handlerName = GetHandlerName();
@@ -78,7 +80,7 @@ namespace A6k.Messaging
             // some impl of Consumer never release the context, so we just get stuck in the while loop
             await Task.Yield();
             // If configured to wait for other parts before processing (ie IMessagePumpWaitFeature) then wait for that set of tokens
-            //TODO: await WaitForOthers(stoppingToken);
+            await WaitForOthers(stoppingToken);
 
             logger.MessagePumpStarted(Name, handlerName);
             while (!stoppingToken.IsCancellationRequested)
@@ -156,23 +158,23 @@ namespace A6k.Messaging
             }
         }
 
-        //TODO: private async Task WaitForOthers(CancellationToken cancellationToken)
-        //{
-        //    // If a IMessagePumpWaitFeature is configured then wait for that set of tokens
-        //    var waitForFeature = features.MessagePumpWaitFeature;
-        //    if (waitForFeature == null || waitForFeature.Names.Length == 0)
-        //        return;
-        //    if (waitTokens == null)
-        //        throw new InvalidOperationException("No WaitTokens defined");
+        private async Task WaitForOthers(CancellationToken cancellationToken)
+        {
+            // If a IMessagePumpWaitFeature is configured then wait for that set of tokens
+            var waitForFeature = features.MessagePumpWaitFeature;
+            if (waitForFeature == null || waitForFeature.Names.Length == 0)
+                return;
+            if (waitTokens == null)
+                throw new InvalidOperationException("No WaitTokens defined");
 
-        //    logger.MessagePumpWaiting(Name, handlerName, waitForFeature.Names);
+            logger.MessagePumpWaiting(Name, handlerName, waitForFeature.Names);
 
-        //    var start = DateTime.UtcNow;
-        //    await waitTokens.WhenAll(cancellationToken, waitForFeature.Names);
-        //    var duration = DateTime.UtcNow - start;
+            var start = DateTime.UtcNow;
+            await waitTokens.WhenAll(cancellationToken, waitForFeature.Names);
+            var duration = DateTime.UtcNow - start;
 
-        //    logger.MessagePumpResumed(Name, handlerName, duration, waitForFeature.Names);
-        //}
+            logger.MessagePumpResumed(Name, handlerName, duration, waitForFeature.Names);
+        }
 
         /// <summary>
         /// Specialised <see cref="IFeatureCollection"/> for the pump

@@ -35,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTopicMap<TKey, TValue>(this IServiceCollection services, string configName, string providerType, Action<CompositeMessageHandler<TKey, TValue>> mapConfig)
         {
             var eof = new TopicEofFeature();
-            // TODO: services.AddWaitToken(configName, eof.IsComplete);
+            services.AddWaitToken(configName, eof.IsComplete);
             services.AddMessagePump<TKey, TValue>(configName, providerType, b =>
             {
                 b.WithHandlers(mapConfig);
@@ -79,7 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddTopicMap<TKey, TValue>(this IServiceCollection services, string configName, string providerType, Action<IServiceProvider, CompositeMessageHandler<TKey, TValue>> mapConfig)
         {
             var eof = new TopicEofFeature();
-            //TODO: services.AddWaitToken(configName, eof.IsComplete);
+            services.AddWaitToken(configName, eof.IsComplete);
             services.AddMessagePump<TKey, TValue>(configName, providerType, b =>
             {
                 b.WithHandlers(mapConfig);
