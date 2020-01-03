@@ -47,7 +47,7 @@ namespace A6k.Messaging.Kafka
 
             config = new ConsumerConfig(options.Configuration);
 
-            // if these are not explicitly set then apply Game default offset tracking strategy
+            // if these are not explicitly set then apply default offset tracking strategy
             if (!config.EnableAutoCommit.HasValue && !config.EnableAutoOffsetStore.HasValue)
             {
                 // see https://github.com/confluentinc/confluent-kafka-dotnet/issues/527#issuecomment-386405668
