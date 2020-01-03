@@ -11,7 +11,7 @@ namespace A6k.Messaging.Tests
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
-        public class TestingMessageHandler<TKey, TValue> : IMessageHandler<TKey, TValue>
+        public class TestMessageHandler<TKey, TValue> : IMessageHandler<TKey, TValue>
         {
             private ConcurrentBag<IMessage<TKey, TValue>> messages = new ConcurrentBag<IMessage<TKey, TValue>>();
             public IReadOnlyCollection<IMessage<TKey, TValue>> Messages => messages;

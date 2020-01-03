@@ -26,7 +26,7 @@ namespace A6k.Messaging
     /// <typeparam name="TValue">Message Value type</typeparam>
     public class MessagePump<TKey, TValue> : BackgroundService, IHasFeatures
     {
-        public const string ProcessActivityName = "Game.Eventing.ProcessMessage";
+        public const string ProcessActivityName = "Messaging.ProcessMessage";
 
         private readonly Func<IMessageConsumer<TKey, TValue>> consumerFactory;
         private readonly IMessageHandler<TKey, TValue> handler;
@@ -79,18 +79,14 @@ namespace A6k.Messaging
             // yielding here allows the BackgroundService.Start to capture this as a Task and not block other processing
             // some impl of Consumer never release the context, so we just get stuck in the while loop
             await Task.Yield();
+
             // If configured to wait for other parts before processing (ie IMessagePumpWaitFeature) then wait for that set of tokens
             await WaitForOthers(stoppingToken);
 
             logger.MessagePumpStarted(Name, handlerName);
             while (!stoppingToken.IsCancellationRequested)
-            {
-                //TODO: await pauseUtil.Wait(stoppingToken);
-                if (stoppingToken.IsCancellationRequested)
-                    break;
-
                 await RunMessagePump(stoppingToken);
-            }
+
             logger.MessagePumpStopped(Name, handlerName);
         }
 

@@ -13,7 +13,7 @@ namespace A6k.Messaging.Tests
             // Arrange
             // fakes
             var fakeBus = new FakeMessageBus<string, string>();
-            var fakeHandler = new TestingMessageHandler<string, string>();
+            var fakeHandler = new TestMessageHandler<string, string>();
 
             // sut, the pump
             var pump = new MessagePump<string, string>(() => fakeBus, fakeHandler);

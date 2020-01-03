@@ -8,11 +8,6 @@ namespace A6k.Messaging.Internal
 {
     public static class WaitTokenExtensions
     {
-        // this is pattern is "duplicated" in other places such as Game.Eventing
-        // this is deliberate as we do not want to take dependencies
-        // Using Tuple means that they are compatible
-        // So WaitTokens created anywhere are compatible and can WhenAll'd for anywhere
-
         public static Task WhenAll(this IEnumerable<WaitToken> waitTokens, params string[] tokenNames)
             => WhenAll(waitTokens, default, tokenNames);
 

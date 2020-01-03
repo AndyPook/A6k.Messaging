@@ -4,15 +4,18 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using App.Metrics;
-using App.Metrics.Timer;
-using BenchmarkDotNet.Attributes;
-using A6k.Messaging.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
+
+using App.Metrics;
+using App.Metrics.Timer;
+using BenchmarkDotNet.Attributes;
+
+using A6k.Messaging.Features;
+using A6k.Messaging.Internal;
 
 namespace A6k.Messaging.Benchmarks
 {
@@ -114,7 +117,7 @@ namespace A6k.Messaging.Benchmarks
                 if (message == null)
                     return;
 
-                var activity = new Activity("Game.Eventing.ProcessMessage");
+                var activity = new Activity("Messaging.ProcessMessage");
                 if (!string.IsNullOrEmpty(message.ActivityId))
                     activity.SetParentId(message.ActivityId);
                 activity.Start();
