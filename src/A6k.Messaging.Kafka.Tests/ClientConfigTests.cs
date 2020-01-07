@@ -1,8 +1,7 @@
 ﻿using Confluent.Kafka;
-using A6k.Messaging.Kafka;
 using Xunit;
 
-namespace A6k.Messaging.Tests
+namespace A6k.Messaging.Kafka.Tests
 {
     public class ClientConfigTests
     {

@@ -9,6 +9,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\A6k.Messaging.Kafka\A6k.Messaging.Kafka.csproj" />
     <ProjectReference Include="..\A6k.Messaging\A6k.Messaging.csproj" />
   </ItemGroup>
 

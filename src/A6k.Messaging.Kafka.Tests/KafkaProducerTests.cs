@@ -6,9 +6,7 @@ using Confluent.Kafka;
 using Moq;
 using Xunit;
 
-using A6k.Messaging.Kafka;
-
-namespace A6k.Messaging.Tests
+namespace A6k.Messaging.Kafka.Tests
 {
     public class KafkaProducerTests
     {

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 using Moq;
 
-namespace A6k.Messaging.Tests
+namespace A6k.Messaging.Kafka.Tests
 {
     public static class MockVerifyExtensions
     {

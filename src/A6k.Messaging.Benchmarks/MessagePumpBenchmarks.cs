@@ -28,22 +28,17 @@ namespace A6k.Messaging.Benchmarks
             this.messageFactory = messageFactory ?? throw new ArgumentNullException(nameof(messageFactory));
         }
 
-        public IFeatureCollection Features { get; } = new FeaturesCollection();
+        public IFeatureSet Features { get; } = new NullFeatureSet();
 
         public Task AcceptAsync(IMessage message) => Task.CompletedTask;
 
-        public void Configure(Action<IFeatureCollection> configureFeatures = null) { }
+        public void Configure(Action<IFeatureSet> configureFeatures = null) { }
 
         public Task<IMessage<TKey, TValue>> ConsumeAsync() => Task.FromResult(messageFactory());
 
         public Task RejectAsync(IMessage<TKey, TValue> message) => Task.CompletedTask;
 
         public void Dispose() { }
-
-        private class FeaturesCollection : FeatureCollectionBase
-        {
-            public override TFeature Get<TFeature>() => default;
-        }
     }
 
     public class Handler : IMessageHandler<byte[], byte[]>
