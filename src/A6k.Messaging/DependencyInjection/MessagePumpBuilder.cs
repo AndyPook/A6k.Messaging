@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+
 using A6k.Messaging;
 using A6k.Messaging.Features;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private readonly string providerType;
 
         private Action<IServiceProvider, CompositeMessageHandler<TKey, TValue>> handlerConfig;
-        private Action<IFeatureCollection> featureConfig;
+        private Action<IFeatureSet> featureConfig;
 
         private readonly Dictionary<object, object> state = new Dictionary<object, object>();
 
@@ -126,7 +126,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="featureConfig"></param>
         /// <returns></returns>
-        public MessagePumpBuilder<TKey, TValue> WithFeatures(Action<IFeatureCollection> featureConfig)
+        public MessagePumpBuilder<TKey, TValue> WithFeatures(Action<IFeatureSet> featureConfig)
         {
             this.featureConfig += featureConfig;
             return this;
@@ -138,7 +138,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <typeparam name="TFeature"></typeparam>
         /// <returns></returns>
         public MessagePumpBuilder<TKey, TValue> WithFeature<TFeature>()
-            where TFeature : class, IFeature
+            where TFeature : class
         {
             featureConfig += f => f.Set<TFeature>();
             return this;
@@ -149,7 +149,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="feature"></param>
         /// <returns></returns>
-        public MessagePumpBuilder<TKey, TValue> WithFeature(IFeature feature)
+        public MessagePumpBuilder<TKey, TValue> WithFeature(object feature)
         {
             featureConfig += f => f.Set(feature);
             return this;

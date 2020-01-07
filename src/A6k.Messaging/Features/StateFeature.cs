@@ -7,7 +7,7 @@ namespace A6k.Messaging.Features
     /// A feature used to hold a key/value bag for a consumer or producer.
     /// Useful for holding flags/values across consumer stop/start
     /// </summary>
-    public class StateFeature : IFeature
+    public class StateFeature
     {
         public StateFeature(Dictionary<object, object> state)
         {

@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMessageProducer<TKey, TValue>(
             this IServiceCollection services,
             string configName,
-            Action<IFeatureCollection> featureConfig = null)
+            Action<IFeatureSet> featureConfig = null)
             => services.AddMessageProducer<TKey, TValue>(configName, null, featureConfig);
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             string configName,
             string providerType,
-            Action<IFeatureCollection> featureConfig = null)
+            Action<IFeatureSet> featureConfig = null)
             => services.AddSingleton(sp => sp.GetMessageProducer<TKey, TValue>(configName, providerType, featureConfig));
     }
 }

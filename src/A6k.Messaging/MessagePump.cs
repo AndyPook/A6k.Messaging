@@ -61,10 +61,10 @@ namespace A6k.Messaging
 
         public string Name { get; set; }
 
-        private readonly FeaturesCollection features = new FeaturesCollection();
-        public IFeatureCollection Features => features;
+        private readonly CustomFeatures features = new CustomFeatures();
+        public IFeatureSet Features => features;
 
-        public void Configure(Action<IFeatureCollection> configureFeatures = null) => configureFeatures?.Invoke(features);
+        public void Configure(Action<IFeatureSet> configureFeatures = null) => configureFeatures?.Invoke(features);
 
         private string GetHandlerName()
         {
@@ -173,26 +173,11 @@ namespace A6k.Messaging
         }
 
         /// <summary>
-        /// Specialised <see cref="IFeatureCollection"/> for the pump
+        /// Specialised <see cref="IFeatureSet"/> for the pump
         /// </summary>
-        private partial class FeaturesCollection : FeatureCollectionBase
+        private class CustomFeatures : FeatureSet
         {
-            private IMessagePumpWaitFeature messagePumpWaitFeature;
-            public IMessagePumpWaitFeature MessagePumpWaitFeature => messagePumpWaitFeature;
-
-            public override TFeature Get<TFeature>()
-            {
-                return TryGet<TFeature>(
-                    messagePumpWaitFeature
-                );
-            }
-
-            public override void Set<TFeature>(TFeature feature)
-            {
-                base.Set(feature);
-
-                TrySet(feature, ref messagePumpWaitFeature);
-            }
+            public IMessagePumpWaitFeature MessagePumpWaitFeature { get; private set; }
         }
     }
 }

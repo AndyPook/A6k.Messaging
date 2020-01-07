@@ -54,10 +54,10 @@ namespace A6k.Messaging
             }));
         }
 
-        private FeaturesCollection features = new FeaturesCollection();
-        public IFeatureCollection Features => features;
+        private CustomFeatures features = new CustomFeatures();
+        public IFeatureSet Features => features;
 
-        public void Configure(Action<IFeatureCollection> configureFeatures = null)
+        public void Configure(Action<IFeatureSet> configureFeatures = null)
         {
             configureFeatures?.Invoke(features);
         }
@@ -91,26 +91,11 @@ namespace A6k.Messaging
         }
 
         /// <summary>
-        /// Specialised <see cref="IFeatureCollection"/> for the consumer
+        /// Specialised <see cref="IFeatureSet"/> for the consumer
         /// </summary>
-        private class FeaturesCollection : FeatureCollectionBase
+        private class CustomFeatures : FeatureSet
         {
-            private IMessagePumpWaitFeature messagePumpWaitFeature;
-            public IMessagePumpWaitFeature MessagePumpWaitFeature => messagePumpWaitFeature;
-
-            public override TFeature Get<TFeature>()
-            {
-                return TryGet<TFeature>(
-                    messagePumpWaitFeature
-                );
-            }
-
-            public override void Set<TFeature>(TFeature feature)
-            {
-                base.Set(feature);
-
-                TrySet(feature, ref messagePumpWaitFeature);
-            }
+            // The Fake Bus has no custom features
         }
     }
 }

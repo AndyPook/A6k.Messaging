@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 namespace A6k.Messaging
 {
     /// <summary>
-    /// A <see cref="IMessageHandler{TKey, TValue}"/> that wraps a set of delegates.
+    /// A <see cref="IMessageHandler{TKey, TValue}"/> that wraps a set of <see cref="IMessageHandler{TKey, TValue}"/>s.
+    /// Allows several handlers to respond to a message.
     /// A convenience, primarily to support a fluent interface.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>

@@ -5,7 +5,7 @@ namespace A6k.Messaging.Features
     /// <summary>
     /// Holds the <see cref="IServiceProvider"/> useful in places where a feature/helper needs to be constructed inside a consumer, producer
     /// </summary>
-    public class ServiceProviderFeature : IFeature
+    public class ServiceProviderFeature
     {
         public ServiceProviderFeature(IServiceProvider serviceProvider)
         {

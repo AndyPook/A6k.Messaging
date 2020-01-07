@@ -58,7 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMessagePump<TKey, TValue, THandler>(
             this IServiceCollection services,
             string configName,
-            Action<IFeatureCollection> featureConfig = null)
+            Action<IFeatureSet> featureConfig = null)
             where THandler : IMessageHandler<TKey, TValue>
             => services.AddMessagePump<TKey, TValue, THandler>(configName, null, featureConfig);
 
@@ -77,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             string configName,
             string providerType,
-            Action<IFeatureCollection> featureConfig = null)
+            Action<IFeatureSet> featureConfig = null)
             where THandler : IMessageHandler<TKey, TValue>
             => services.AddMessagePump<TKey, TValue>(configName, providerType, b =>
                 {

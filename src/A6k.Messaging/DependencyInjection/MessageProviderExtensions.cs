@@ -82,7 +82,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="providerName">A configured provider type name (via <see cref="AddMessageProviders(IServiceCollection, string, Type, Type)"/>). If null, then use the first configured provider</param>
         /// <param name="featureConfig"></param>
         /// <returns></returns>
-        public static IMessageProducer<TKey, TValue> GetMessageProducer<TKey, TValue>(this IServiceProvider sp, string configName = null, string providerName = null, Action<IFeatureCollection> featureConfig = null)
+        public static IMessageProducer<TKey, TValue> GetMessageProducer<TKey, TValue>(this IServiceProvider sp, string configName = null, string providerName = null, Action<IFeatureSet> featureConfig = null)
         {
             var (ProducerType, ConsumerType) = GetProvider(providerName);
 
@@ -106,7 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="providerName">A configured provider type name (via <see cref="AddMessageProviders(IServiceCollection, string, Type, Type)"/>). If null, then use the first configured provider</param>
         /// <param name="featureConfig"></param>
         /// <returns></returns>
-        public static IMessageConsumer<TKey, TValue> GetMessageConsumer<TKey, TValue>(this IServiceProvider sp, string configName = null, string providerName = null, Action<IFeatureCollection> featureConfig = null)
+        public static IMessageConsumer<TKey, TValue> GetMessageConsumer<TKey, TValue>(this IServiceProvider sp, string configName = null, string providerName = null, Action<IFeatureSet> featureConfig = null)
         {
             var (ProducerType, ConsumerType) = GetProvider(providerName);
 
@@ -131,7 +131,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="providerName">A configured provider type name (via <see cref="AddMessageProviders(IServiceCollection, string, Type, Type)"/>). If null, then use the first configured provider</param>
         /// <param name="featureConfig"></param>
         /// <returns></returns>
-        public static Func<IMessageConsumer<TKey, TValue>> GetMessageConsumerFactory<TKey, TValue>(this IServiceProvider sp, string configName = null, string providerName = null, Action<IFeatureCollection> featureConfig = null)
+        public static Func<IMessageConsumer<TKey, TValue>> GetMessageConsumerFactory<TKey, TValue>(this IServiceProvider sp, string configName = null, string providerName = null, Action<IFeatureSet> featureConfig = null)
             => () => sp.GetMessageConsumer<TKey, TValue>(configName, providerName, featureConfig);
     }
 }

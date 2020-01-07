@@ -3,7 +3,7 @@ using A6k.Messaging.Features;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class FeatureCollectionExtensions
+    public static class FeatureSetExtensions
     {
         /// <summary>
         /// Add a Feature constructed via the <see cref="IServiceProvider"/> 
@@ -12,15 +12,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="f"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static IFeatureCollection Set<TFeature>(this IFeatureCollection f, params object[] args) where TFeature : class, IFeature
+        public static IFeatureSet Set<TFeature>(this IFeatureSet f, params object[] args) where TFeature : class
         {
-            if (f is FeatureCollectionBase features)
+            if (f.ServiceProvider != null)
             {
-                var feature = ActivatorUtilities.CreateInstance<TFeature>(features.ServiceProvider, args);
+                var feature = ActivatorUtilities.CreateInstance<TFeature>(f.ServiceProvider, args);
                 f.Set(feature);
             }
             else
-                throw new ArgumentException("FeatureCollection does not support ServiceProvider");
+                throw new ArgumentException("ServiceProvider not initialized");
 
             return f;
         }
@@ -32,15 +32,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="f"></param>
         /// <param name="factory"></param>
         /// <returns></returns>
-        public static IFeatureCollection Set<TFeature>(this IFeatureCollection f, Func<IServiceProvider, TFeature> factory) where TFeature : class, IFeature
+        public static IFeatureSet Set<TFeature>(this IFeatureSet f, Func<IServiceProvider, TFeature> factory) where TFeature : class
         {
-            if (f is FeatureCollectionBase features)
+            if (f.ServiceProvider != null)
             {
-                var feature = factory(features.ServiceProvider);
+                var feature = factory(f.ServiceProvider);
                 f.Set(feature);
             }
             else
-                throw new ArgumentException("FeatureCollection does not support ServiceProvider");
+                throw new ArgumentException("ServiceProvider not initialized");
 
             return f;
         }
@@ -50,12 +50,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
-        public static StateFeature GetState(this IFeatureCollection f)
+        public static StateFeature GetState(this IFeatureSet f)
         {
-            if (f is FeatureCollectionBase features)
-                return features.State;
+            if (f.State != null)
+                return f.State;
             else
-                throw new ArgumentException("FeatureCollection does not support ServiceProvider");
+                throw new ArgumentException("State not initialized");
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="f"></param>
         /// <param name="onError">A method taking the <see cref="Exception"/> thrown while consuming</param>
         /// <returns></returns>
-        public static IFeatureCollection OnConsumeError(this IFeatureCollection f, Action<Exception> onError)
+        public static IFeatureSet OnConsumeError(this IFeatureSet f, Action<Exception> onError)
             => f.OnConsumeError(new DelegateConsumeErrorFeature(onError));
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="f"></param>
         /// <param name="onError">A <see cref="IConsumeErrorFeature"/> taking the <see cref="Exception"/> thrown while consuming</param>
         /// <returns></returns>
-        public static IFeatureCollection OnConsumeError(this IFeatureCollection f, IConsumeErrorFeature onError)
+        public static IFeatureSet OnConsumeError(this IFeatureSet f, IConsumeErrorFeature onError)
         {
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
@@ -89,7 +89,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="f"></param>
         /// <param name="names">The config names of the consumers to wait for</param>
         /// <returns></returns>
-        public static IFeatureCollection WaitFor(this IFeatureCollection f, params string[] names)
+        public static IFeatureSet WaitFor(this IFeatureSet f, params string[] names)
         {
             if (names == null || names.Length == 0)
                 return f;
