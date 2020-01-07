@@ -1,8 +1,6 @@
-﻿using A6k.Messaging.Features;
-
-namespace A6k.Messaging.Kafka.Features
+﻿namespace A6k.Messaging.Kafka.Features
 {
-    public interface IStatisticsHandlingFeature : IFeature
+    public interface IStatisticsHandlingFeature
     {
         void OnStatistics(string statsJson);
     }

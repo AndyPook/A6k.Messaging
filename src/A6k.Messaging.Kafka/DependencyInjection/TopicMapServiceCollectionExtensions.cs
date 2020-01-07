@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Adds a special MessagePump/Handler for reading a Topic into a "map".
         /// Provides a mechanism for allowing other parts to wait for the reading to the end of the Topic so the map is complete.
-        /// See <see cref="FeatureCollectionExtensions.WaitFor"/>, in combination with "AddMessagePump".
+        /// See <see cref="FeatureSetExtensions.WaitFor"/>, in combination with "AddMessagePump".
         /// </summary>
         /// <typeparam name="TKey">Key type of the message</typeparam>
         /// <typeparam name="TValue">Value type of the message</typeparam>
@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Adds a special MessagePump/Handler for reading a Topic into a "map".
         /// Provides a mechanism for allowing other parts to wait for the reading to the end of the Topic so the map is complete.
-        /// See <see cref="FeatureCollectionExtensions.WaitFor"/>, in combination with "AddMessagePump".
+        /// See <see cref="FeatureSetExtensions.WaitFor"/>, in combination with "AddMessagePump".
         /// </summary>
         /// <typeparam name="TKey">Key type of the message</typeparam>
         /// <typeparam name="TValue">Value type of the message</typeparam>
@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Adds a special MessagePump/Handler for reading a Topic into a "map".
         /// Provides a mechanism for allowing other parts to wait for the reading to the end of the Topic so the map is complete.
-        /// See <see cref="FeatureCollectionExtensions.WaitFor"/>, in combination with "AddMessagePump".
+        /// See <see cref="FeatureSetExtensions.WaitFor"/>, in combination with "AddMessagePump".
         /// </summary>
         /// <typeparam name="TKey">Key type of the message</typeparam>
         /// <typeparam name="TValue">Value type of the message</typeparam>
@@ -67,7 +67,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// Adds a special MessagePump/Handler for reading a Topic into a "map".
         /// Provides a mechanism for allowing other parts to wait for the reading to the end of the Topic so the map is complete.
-        /// See <see cref="FeatureCollectionExtensions.WaitFor"/>, in combination with "AddMessagePump".
+        /// See <see cref="FeatureSetExtensions.WaitFor"/>, in combination with "AddMessagePump".
         /// </summary>
         /// <typeparam name="TKey">Key type of the message</typeparam>
         /// <typeparam name="TValue">Value type of the message</typeparam>

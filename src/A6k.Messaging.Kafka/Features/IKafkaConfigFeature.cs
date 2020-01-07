@@ -1,15 +1,14 @@
 ﻿using Confluent.Kafka;
-using A6k.Messaging.Features;
 using System;
 
 namespace A6k.Messaging.Kafka.Features
 {
-    public interface IKafkaConfigFeature<T> : IFeature where T : ClientConfig
+    public interface IKafkaConfigFeature<T> where T : ClientConfig
     {
         void Configure(T config);
     }
 
-    public interface IKafkaConfigBuilderFeature<T> : IFeature
+    public interface IKafkaConfigBuilderFeature<T>
     {
         void Configure(T configBuilder);
     }

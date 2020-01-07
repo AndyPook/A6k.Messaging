@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class KafkaFeatureCollectionExtensions
     {
-        public static IFeatureCollection SetJsonSerialization(this IFeatureCollection f, JsonSerializerSettings valueSettings, JsonSerializerSettings keySettings = null)
+        public static IFeatureSet SetJsonSerialization(this IFeatureSet f, JsonSerializerSettings valueSettings, JsonSerializerSettings keySettings = null)
         {
             if (valueSettings == null && keySettings == null)
                 return f;
@@ -18,10 +18,10 @@ namespace Microsoft.Extensions.DependencyInjection
             return f;
         }
 
-        public static IFeatureCollection SetProducerFactory<TKey, TValue>(this IFeatureCollection f, IProducer<TKey, TValue> producer)
+        public static IFeatureSet SetProducerFactory<TKey, TValue>(this IFeatureSet f, IProducer<TKey, TValue> producer)
             => f.SetProducerFactory<TKey, TValue>(_ => producer);
 
-        public static IFeatureCollection SetProducerFactory<TKey, TValue>(this IFeatureCollection f, Func<ProducerBuilder<TKey, TValue>, IProducer<TKey, TValue>> factory)
+        public static IFeatureSet SetProducerFactory<TKey, TValue>(this IFeatureSet f, Func<ProducerBuilder<TKey, TValue>, IProducer<TKey, TValue>> factory)
         {
             if (factory == null)
                 return f;
@@ -31,10 +31,10 @@ namespace Microsoft.Extensions.DependencyInjection
             return f;
         }
 
-        public static IFeatureCollection SetConsumerFactory<TKey, TValue>(this IFeatureCollection f, IConsumer<TKey, TValue> consumer)
+        public static IFeatureSet SetConsumerFactory<TKey, TValue>(this IFeatureSet f, IConsumer<TKey, TValue> consumer)
             => f.SetConsumerFactory<TKey, TValue>(_ => consumer);
 
-        public static IFeatureCollection SetConsumerFactory<TKey, TValue>(this IFeatureCollection f, Func<ConsumerBuilder<TKey, TValue>, IConsumer<TKey, TValue>> factory)
+        public static IFeatureSet SetConsumerFactory<TKey, TValue>(this IFeatureSet f, Func<ConsumerBuilder<TKey, TValue>, IConsumer<TKey, TValue>> factory)
         {
             if (factory == null)
                 return f;
@@ -49,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
-        public static IFeatureCollection StartAtBeginning(this IFeatureCollection f)
+        public static IFeatureSet StartAtBeginning(this IFeatureSet f)
         {
             f.Set(StartAtPositionFeature.Beginning);
 
@@ -61,7 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
-        public static IFeatureCollection StartAtEnd(this IFeatureCollection f)
+        public static IFeatureSet StartAtEnd(this IFeatureSet f)
         {
             f.Set(StartAtPositionFeature.End);
 
@@ -73,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
-        public static IFeatureCollection UniqueGroupId(this IFeatureCollection f)
+        public static IFeatureSet UniqueGroupId(this IFeatureSet f)
         {
             f.Set(new UniqueGroupIdFeature());
 

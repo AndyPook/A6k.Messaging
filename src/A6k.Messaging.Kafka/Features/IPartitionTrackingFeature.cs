@@ -1,11 +1,9 @@
-﻿using A6k.Messaging.Features;
-
-namespace A6k.Messaging.Kafka.Features
+﻿namespace A6k.Messaging.Kafka.Features
 {
     /// <summary>
     /// This feature is used when a new consumer group partition assignment has been received by this consumer.
     /// </summary>
-    public interface IPartitionTrackingFeature : IFeature
+    public interface IPartitionTrackingFeature
     {
         /// <summary>
         /// This method is called when a new consumer group partition assignment has been received by this consumer.
@@ -34,7 +32,7 @@ namespace A6k.Messaging.Kafka.Features
     /// <summary>
     /// This feature is used when a new consumer group partition assignment has been received by this consumer.
     /// </summary>
-    public interface IPartitionAssignmentFeature : IFeature
+    public interface IPartitionAssignmentFeature
     {
         /// <summary>
         /// This method is called when a new consumer group partition assignment has been received by this consumer.

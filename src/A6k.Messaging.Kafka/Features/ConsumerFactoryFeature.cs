@@ -1,6 +1,5 @@
 ﻿using System;
 using Confluent.Kafka;
-using A6k.Messaging.Features;
 
 namespace A6k.Messaging.Kafka.Features
 {
@@ -12,7 +11,7 @@ namespace A6k.Messaging.Kafka.Features
         }
     }
     
-    public class ConsumerFactoryFeature<TKey, TValue> : IFeature
+    public class ConsumerFactoryFeature<TKey, TValue>
     {
         public ConsumerFactoryFeature(Func<ConsumerBuilder<TKey, TValue>, IConsumer<TKey, TValue>> consumerFactory)
         {

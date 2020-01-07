@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-using A6k.Messaging.Features;
-
 namespace A6k.Messaging.Kafka.Features
 {
-    public interface IOffsetTrackingFeature<TKey, TValue> : IFeature
+    public interface IOffsetTrackingFeature<TKey, TValue>
     {
         Task AcceptAsync(IMessage message);
         Task RejectAsync(IMessage<TKey, TValue> message);

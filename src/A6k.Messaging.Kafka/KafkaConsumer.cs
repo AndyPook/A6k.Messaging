@@ -37,10 +37,10 @@ namespace A6k.Messaging.Kafka
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        private readonly FeaturesCollection features = new FeaturesCollection();
-        public IFeatureCollection Features => features;
+        private readonly CustomFeatures features = new CustomFeatures();
+        public IFeatureSet Features => features;
 
-        public void Configure(Action<IFeatureCollection> configureFeatures = null)
+        public void Configure(Action<IFeatureSet> configureFeatures = null)
         {
             configureFeatures?.Invoke(Features);
             features.Config.Configure(options.Configuration);
@@ -189,81 +189,33 @@ namespace A6k.Messaging.Kafka
         public void Dispose() => consumer.Close();
 
         /// <summary>
-        /// Specialised <see cref="IFeatureCollection"/> for the consumer
+        /// Specialised <see cref="IFeatureSet"/> for the consumer
         /// </summary>
-        private partial class FeaturesCollection : FeatureCollectionBase
+        private class CustomFeatures : FeatureSet
         {
-            private ConsumerFactoryFeature<TKey, TValue> factoryFeature;
-            public ConsumerFactoryFeature<TKey, TValue> FactoryFeature => factoryFeature;
+            public ConsumerFactoryFeature<TKey, TValue> FactoryFeature { get; private set; }
 
-            private IConsumeErrorFeature onConsumeError;
-            public IConsumeErrorFeature OnConsumeError => onConsumeError;
+            public IConsumeErrorFeature OnConsumeError { get; private set; }
 
-            private IConfigFeature config = new CompositeConfigFeature();
-            public IConfigFeature Config => config;
+            public IConfigFeature Config { get; private set; } = new CompositeConfigFeature();
 
-            private IKafkaConfigFeature<ConsumerConfig> kafkaConfig = new CompositeKafkaConfigFeature<ConsumerConfig>();
-            public IKafkaConfigFeature<ConsumerConfig> KafkaConfig => kafkaConfig;
+            public IKafkaConfigFeature<ConsumerConfig> KafkaConfig { get; private set; } = new CompositeKafkaConfigFeature<ConsumerConfig>();
 
-            private IFeatureRequiresConsumer<TKey, TValue> featureRequiresConsumer = new CompositeFeatureRequiresConsumer<TKey, TValue>();
-            public IFeatureRequiresConsumer<TKey, TValue> FeatureRequiresConsumer => featureRequiresConsumer;
+            public IFeatureRequiresConsumer<TKey, TValue> FeatureRequiresConsumer { get; private set; } = new CompositeFeatureRequiresConsumer<TKey, TValue>();
 
-            private IKafkaConfigBuilderFeature<ConsumerBuilder<TKey, TValue>> builderFeature;
-            public IKafkaConfigBuilderFeature<ConsumerBuilder<TKey, TValue>> BuilderFeature => builderFeature;
+            public IKafkaConfigBuilderFeature<ConsumerBuilder<TKey, TValue>> BuilderFeature { get; private set; }
 
-            private IKafkaSerializationFeature serializationFeature;
-            public IKafkaSerializationFeature SerializationFeature => serializationFeature;
+            public IKafkaSerializationFeature SerializationFeature { get; private set; }
 
-            private IPartitionTrackingFeature partitionTracking;
-            public IPartitionTrackingFeature PartitionTracking => partitionTracking;
+            public IPartitionTrackingFeature PartitionTracking { get; private set; }
 
-            private IPartitionAssignmentFeature partitionAssignment;
-            public IPartitionAssignmentFeature PartitionAssignment => partitionAssignment;
+            public IPartitionAssignmentFeature PartitionAssignment { get; private set; }
 
-            private IPartitionEofFeature partitionEof;
-            public IPartitionEofFeature PartitionEof => partitionEof;
+            public IPartitionEofFeature PartitionEof { get; private set; }
 
-            private IOffsetTrackingFeature<TKey, TValue> offsetTracking;
-            public IOffsetTrackingFeature<TKey, TValue> OffsetTracking => offsetTracking;
+            public IOffsetTrackingFeature<TKey, TValue> OffsetTracking { get; private set; }
 
-            private IStatisticsHandlingFeature statisticsHandling;
-            public IStatisticsHandlingFeature StatisticsHandling => statisticsHandling;
-
-            public override TFeature Get<TFeature>()
-            {
-                return TryGet<TFeature>(
-                    onConsumeError,
-                    config,
-                    kafkaConfig,
-                    builderFeature,
-                    offsetTracking,
-                    statisticsHandling,
-                    featureRequiresConsumer,
-                    partitionTracking,
-                    partitionAssignment,
-                    partitionEof,
-                    serializationFeature,
-                    factoryFeature
-                );
-            }
-
-            public override void Set<TFeature>(TFeature feature)
-            {
-                base.Set(feature);
-
-                TrySet(feature, ref onConsumeError);
-                TrySet(feature, ref config);
-                TrySet(feature, ref kafkaConfig);
-                TrySet(feature, ref builderFeature);
-                TrySet(feature, ref offsetTracking);
-                TrySet(feature, ref statisticsHandling);
-                TrySet(feature, ref featureRequiresConsumer);
-                TrySet(feature, ref partitionTracking);
-                TrySet(feature, ref partitionAssignment);
-                TrySet(feature, ref partitionEof);
-                TrySet(feature, ref serializationFeature);
-                TrySet(feature, ref factoryFeature);
-            }
+            public IStatisticsHandlingFeature StatisticsHandling { get; private set; }
         }
 
         private class ConsumerBuilderFactory : ConsumerBuilder<TKey, TValue>

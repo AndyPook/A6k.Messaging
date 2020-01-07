@@ -34,10 +34,10 @@ namespace A6k.Messaging.Kafka
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        private readonly FeaturesCollection features = new FeaturesCollection();
-        public IFeatureCollection Features => features;
+        private readonly CustomFeatures features = new CustomFeatures();
+        public IFeatureSet Features => features;
 
-        public void Configure(Action<IFeatureCollection> configureFeatures = null)
+        public void Configure(Action<IFeatureSet> configureFeatures = null)
         {
             configureFeatures?.Invoke(features);
             features.Config.Configure(options.Configuration);
@@ -172,50 +172,21 @@ namespace A6k.Messaging.Kafka
             throw new InvalidOperationException("Header value type not handled: " + value.GetType().Name);
         }
 
-        private class FeaturesCollection : FeatureCollectionBase
+        private class CustomFeatures : FeatureSet
         {
-            private ProducerFactoryFeature<TKey, TValue> factoryFeature;
-            public ProducerFactoryFeature<TKey, TValue> FactoryFeature => factoryFeature;
+            public ProducerFactoryFeature<TKey, TValue> FactoryFeature { get; private set; }
 
-            private IConfigFeature config = new CompositeConfigFeature();
-            public IConfigFeature Config => config;
+            public IConfigFeature Config { get; private set; }
 
-            private IKafkaConfigFeature<ProducerConfig> kafkaConfig = new CompositeKafkaConfigFeature<ProducerConfig>();
-            public IKafkaConfigFeature<ProducerConfig> KafkaConfig => kafkaConfig;
+            public IKafkaConfigFeature<ProducerConfig> KafkaConfig { get; private set; } = new CompositeKafkaConfigFeature<ProducerConfig>();
 
-            private IKafkaConfigBuilderFeature<ProducerBuilder<TKey, TValue>> builderFeature;
-            public IKafkaConfigBuilderFeature<ProducerBuilder<TKey, TValue>> BuilderFeature => builderFeature;
+            public IKafkaConfigBuilderFeature<ProducerBuilder<TKey, TValue>> BuilderFeature { get; private set; }
 
-            private IStatisticsHandlingFeature statisticsHandling;
-            public IStatisticsHandlingFeature StatisticsHandling => statisticsHandling;
+            public IStatisticsHandlingFeature StatisticsHandling { get; private set; }
 
-            private IKafkaSerializationFeature serializationFeature;
-            public IKafkaSerializationFeature SerializationFeature => serializationFeature;
-
-            public override TFeature Get<TFeature>()
-            {
-                return TryGet<TFeature>(
-                    config,
-                    kafkaConfig,
-                    statisticsHandling,
-                    serializationFeature,
-                    builderFeature,
-                    factoryFeature
-                );
-            }
-
-            public override void Set<TFeature>(TFeature feature)
-            {
-                base.Set(feature);
-
-                TrySet(feature, ref config);
-                TrySet(feature, ref kafkaConfig);
-                TrySet(feature, ref statisticsHandling);
-                TrySet(feature, ref serializationFeature);
-                TrySet(feature, ref builderFeature);
-                TrySet(feature, ref factoryFeature);
-            }
+            public IKafkaSerializationFeature SerializationFeature { get; private set; }
         }
+
         private class ProducerBuilderFactory : ProducerBuilder<TKey, TValue>
         {
             public ProducerBuilderFactory(IEnumerable<KeyValuePair<string, string>> config) : base(config) { }

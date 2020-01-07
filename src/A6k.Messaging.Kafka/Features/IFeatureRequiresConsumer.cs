@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using A6k.Messaging.Features;
 
 namespace A6k.Messaging.Kafka.Features
 {
@@ -8,7 +7,7 @@ namespace A6k.Messaging.Kafka.Features
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public interface IFeatureRequiresConsumer<TKey, TValue> : IFeature
+    public interface IFeatureRequiresConsumer<TKey, TValue>
     {
         /// <summary>
         /// Capture the Kafka Consumer

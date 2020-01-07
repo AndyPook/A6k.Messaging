@@ -55,10 +55,10 @@ namespace A6k.Messaging.Kafka
             }));
         }
 
-        private FeaturesCollection features = new FeaturesCollection();
-        public IFeatureCollection Features => features;
+        private CustomFeatures features = new CustomFeatures();
+        public IFeatureSet Features => features;
 
-        public void Configure(Action<IFeatureCollection> configureFeatures = null)
+        public void Configure(Action<IFeatureSet> configureFeatures = null)
         {
             configureFeatures?.Invoke(features);
         }
@@ -112,46 +112,17 @@ namespace A6k.Messaging.Kafka
         }
 
         /// <summary>
-        /// Specialised <see cref="IFeatureCollection"/> for the consumer
+        /// Specialised <see cref="IFeatureSet"/> for the consumer
         /// </summary>
-        private class FeaturesCollection : FeatureCollectionBase
+        private class CustomFeatures : FeatureSet
         {
-            private IOffsetTrackingFeature<TKey, TValue> offsetTracking;
-            public IOffsetTrackingFeature<TKey, TValue> OffsetTracking => offsetTracking;
+            public IOffsetTrackingFeature<TKey, TValue> OffsetTracking { get; private set; }
 
-            private IPartitionTrackingFeature partitionTracking;
-            public IPartitionTrackingFeature PartitionTracking => partitionTracking;
+            public IPartitionTrackingFeature PartitionTracking { get; private set; }
 
-            private IPartitionAssignmentFeature partitionAssignment;
-            public IPartitionAssignmentFeature PartitionAssignment => partitionAssignment;
+            public IPartitionAssignmentFeature PartitionAssignment { get; private set; }
 
-            private IPartitionEofFeature partitionEof;
-            public IPartitionEofFeature PartitionEof => partitionEof;
-
-            private IMessagePumpWaitFeature messagePumpWaitFeature;
-            public IMessagePumpWaitFeature MessagePumpWaitFeature => messagePumpWaitFeature;
-
-            public override TFeature Get<TFeature>()
-            {
-                return TryGet<TFeature>(
-                    offsetTracking,
-                    partitionTracking,
-                    partitionAssignment,
-                    partitionEof,
-                    messagePumpWaitFeature
-                );
-            }
-
-            public override void Set<TFeature>(TFeature feature)
-            {
-                base.Set(feature);
-
-                TrySet(feature, ref offsetTracking);
-                TrySet(feature, ref partitionTracking);
-                TrySet(feature, ref partitionAssignment);
-                TrySet(feature, ref partitionEof);
-                TrySet(feature, ref messagePumpWaitFeature);
-            }
+            public IPartitionEofFeature PartitionEof { get; private set; }
         }
     }
 }
