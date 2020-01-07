@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+﻿using System;
+using Confluent.Kafka;
 
 namespace A6k.Messaging.Kafka
 {
@@ -11,7 +12,10 @@ namespace A6k.Messaging.Kafka
         /// <returns></returns>
         public static TopicPartitionOffset AsTopicPartitionOffset(this IMessage message)
         {
-            return new TopicPartitionOffset(new TopicPartition(message.Topic, new Partition(message.Partition)), message.Offset + 1);
+            if (!(message is IKafkaMetaData km))
+                throw new ArgumentException("message is not a Kafka message", nameof(message));
+
+            return new TopicPartitionOffset(new TopicPartition(km.Topic, new Partition(km.Partition)), km.Offset + 1);
         }
     }
 }

@@ -152,14 +152,15 @@ namespace A6k.Messaging.Kafka
                 return Task.FromResult<IMessage<TKey, TValue>>(null);
             }
 
-            var result = new Message<TKey, TValue>
+            var result = new KafkaMessage<TKey, TValue>(
+                consumeResult.Topic,
+                consumeResult.Partition.Value,
+                consumeResult.Offset.Value
+            )
             {
                 Key = consumeResult.Message.Key,
                 Value = consumeResult.Message.Value,
-                Timestamp = consumeResult.Message.Timestamp.UtcDateTime,
-                Topic = consumeResult.Topic,
-                Partition = consumeResult.Partition.Value,
-                Offset = consumeResult.Offset.Value
+                Timestamp = consumeResult.Message.Timestamp.UtcDateTime
             };
 
             foreach (var header in consumeResult.Message.Headers)

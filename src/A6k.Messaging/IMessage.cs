@@ -17,9 +17,6 @@ namespace A6k.Messaging
         /// Time the message was produced
         /// </summary>
         DateTime Timestamp { get; }
-        string Topic { get; }
-        int Partition { get; }
-        long Offset { get; }
 
         IEnumerable<KeyValuePair<string, object>> Headers { get; }
         object GetHeader(string key);

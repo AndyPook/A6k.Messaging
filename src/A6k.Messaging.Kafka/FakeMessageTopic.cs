@@ -85,10 +85,10 @@ namespace A6k.Messaging.Kafka
         {
             if (topic.TryTake(out var message, 100))
             {
-                if (assignedPartitions.TryAdd(message.Partition, 0))
+                if (message is IKafkaMetaData km && assignedPartitions.TryAdd(km.Partition, 0))
                 {
-                    features.PartitionTracking?.PartitionAssigned(TopicName, message.Partition);
-                    features.PartitionAssignment?.PartitionAssigned(TopicName, message.Partition);
+                    features.PartitionTracking?.PartitionAssigned(TopicName, km.Partition);
+                    features.PartitionAssignment?.PartitionAssigned(TopicName, km.Partition);
                 }
 
                 return Task.FromResult(message);

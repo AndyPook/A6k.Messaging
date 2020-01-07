@@ -23,15 +23,6 @@ namespace A6k.Messaging
         public DateTime Timestamp { get; set; }
 
         /// <inheritdoc/>
-        public string Topic { get; set; }
-
-        /// <inheritdoc/>
-        public int Partition { get; set; }
-
-        /// <inheritdoc/>
-        public long Offset { get; set; }
-
-        /// <inheritdoc/>
         public TKey Key { get; set; }
 
         /// <inheritdoc/>
