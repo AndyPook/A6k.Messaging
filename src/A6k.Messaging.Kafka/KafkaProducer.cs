@@ -184,7 +184,7 @@ namespace A6k.Messaging.Kafka
 
             public IStatisticsHandlingFeature StatisticsHandling { get; private set; }
 
-            public IKafkaSerializationFeature SerializationFeature { get; private set; }
+            public KafkaSerializationFeature<TKey, TValue> SerializationFeature { get; private set; }
         }
 
         private class ProducerBuilderFactory : ProducerBuilder<TKey, TValue>

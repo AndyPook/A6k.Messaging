@@ -2,22 +2,11 @@
 using Confluent.Kafka;
 using A6k.Messaging.Features;
 using A6k.Messaging.Kafka.Features;
-using Newtonsoft.Json;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class KafkaFeatureCollectionExtensions
     {
-        public static IFeatureSet SetJsonSerialization(this IFeatureSet f, JsonSerializerSettings valueSettings, JsonSerializerSettings keySettings = null)
-        {
-            if (valueSettings == null && keySettings == null)
-                return f;
-
-            f.Set(new KafkaSerializationFeature(keySettings, valueSettings));
-
-            return f;
-        }
-
         public static IFeatureSet SetProducerFactory<TKey, TValue>(this IFeatureSet f, IProducer<TKey, TValue> producer)
             => f.SetProducerFactory<TKey, TValue>(_ => producer);
 

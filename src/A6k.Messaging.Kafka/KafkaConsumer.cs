@@ -68,7 +68,7 @@ namespace A6k.Messaging.Kafka
             var builder =
                 new ConsumerBuilderFactory(config)
                 .SetFactory(features.FactoryFeature)
-                .SetDeserializers(features.SerializationFeature);
+                .SetDeserializers(features.DeserializationFeature);
             features.BuilderFeature?.Configure(builder);
 
             if (features.PartitionTracking != null || features.PartitionAssignment != null)
@@ -206,7 +206,7 @@ namespace A6k.Messaging.Kafka
 
             public IKafkaConfigBuilderFeature<ConsumerBuilder<TKey, TValue>> BuilderFeature { get; private set; }
 
-            public IKafkaSerializationFeature SerializationFeature { get; private set; }
+            public KafkaDeserializationFeature<TKey, TValue> DeserializationFeature { get; private set; }
 
             public IPartitionTrackingFeature PartitionTracking { get; private set; }
 
