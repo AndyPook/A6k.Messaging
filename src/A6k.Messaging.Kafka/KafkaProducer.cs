@@ -176,7 +176,7 @@ namespace A6k.Messaging.Kafka
         {
             public ProducerFactoryFeature<TKey, TValue> FactoryFeature { get; private set; }
 
-            public IConfigFeature Config { get; private set; }
+            public IConfigFeature Config { get; private set; } = new CompositeConfigFeature();
 
             public IKafkaConfigFeature<ProducerConfig> KafkaConfig { get; private set; } = new CompositeKafkaConfigFeature<ProducerConfig>();
 
